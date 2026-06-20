@@ -20,6 +20,6 @@ spec:
       containers:
       - name: flask-cicd
         image: arsalan87/flask-cicd-pipeline:latest
-
+        imagePullPolicy: Always
         ports:
         - containerPort: 5000
