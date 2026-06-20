@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: flask-cicd
+
+spec:
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: flask-cicd
+
+  template:
+    metadata:
+      labels:
+        app: flask-cicd
+
+    spec:
+      containers:
+      - name: flask-cicd
+        image: arsalan87/flask-cicd-pipeline:latest
+
+        ports:
+        - containerPort: 5000
