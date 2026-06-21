@@ -23,10 +23,14 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t arsalan87/flask-cicd-pipeline:latest .
+        docker build \
+          -t arsalan87/flask-cicd-pipeline:${{ github.sha }} \
+          -t arsalan87/flask-cicd-pipeline:latest \
+          .
 
     - name: Push Docker image
       run: |
+        docker push arsalan87/flask-cicd-pipeline:${{ github.sha }}
         docker push arsalan87/flask-cicd-pipeline:latest
 
     - name: Configure SSH
@@ -40,4 +44,4 @@ jobs:
         ssh -o StrictHostKeyChecking=no \
         -i ~/.ssh/ec2_key \
         ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
-        "kubectl rollout restart deployment/flask-cicd && kubectl rollout status deployment/flask-cicd"
+        "kubectl set image deployment/flask-cicd flask-cicd=arsalan87/flask-cicd-pipeline:${{ github.sha }} && kubectl rollout status deployment/flask-cicd"
